@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "ModuleWindow.h"
 #include "ModuleRender.h"
+#include "ModulePlayer.h"
 #include <math.h>
 
 ModuleRender::ModuleRender(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -65,6 +66,11 @@ update_status ModuleRender::Update()
 	if(App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 		App->renderer->camera.x -= speed;
 	*/
+
+	title.create("Lifes: %d",App->player->lifes);
+	App->window->SetTitle(title.GetString());
+
+
 	return UPDATE_CONTINUE;
 }
 

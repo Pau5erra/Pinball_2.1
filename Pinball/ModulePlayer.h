@@ -19,10 +19,19 @@ public:
 	bool CleanUp();
 
 public:
-	SDL_Texture* box;
+	p2List<PhysBody*> circles;
+
+
+	SDL_Texture* ball_texture;
+	SDL_Texture* box_texture;
+	
+	PhysBody* ball;
+
 
 	// Prismatic Joint
 	PhysBody* BoxUp;
 	PhysBody* StaticBox;
 	b2PrismaticJoint* prismatic_joint;
+
+	int lifes;
 };

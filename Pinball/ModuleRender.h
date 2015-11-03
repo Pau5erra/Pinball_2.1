@@ -1,6 +1,7 @@
 #pragma once
 #include "Module.h"
 #include "Globals.h"
+#include "p2SString.h"
 
 #include "SDL\include\SDL.h"
 
@@ -24,4 +25,6 @@ public:
 public:
 	SDL_Renderer* renderer;
 	SDL_Rect camera;
+
+	p2SString title;
 };

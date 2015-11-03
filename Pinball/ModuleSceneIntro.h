@@ -3,6 +3,7 @@
 #include "p2List.h"
 #include "p2Point.h"
 #include "Globals.h"
+#include "Box2D/Box2D/Box2D.h"
 
 class PhysBody;
 class b2PrismaticJoint;
@@ -19,9 +20,11 @@ public:
 	void OnCollision(PhysBody* bodyA, PhysBody* bodyB);
 
 public:
-	p2List<PhysBody*> circles;
+	
 	p2List<PhysBody*> boxes;
 	p2List<PhysBody*> ricks;
+
+	
 	//creem un punter body que apuntara al objecte caixa
 	PhysBody* caixa;
 	PhysBody* BoxUp;
@@ -31,10 +34,8 @@ public:
 	PhysBody* sensor;
 
 	bool sensed;
-
-	SDL_Texture* circle;
+	bool ball_fall;
 	
-	SDL_Texture* rick;
 	SDL_Texture* pinball_empty;
 	SDL_Texture* flippers;
 	uint bonus_fx;

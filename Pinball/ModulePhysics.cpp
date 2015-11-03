@@ -279,6 +279,7 @@ PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius)
 	b2FixtureDef fixture;
 	fixture.shape = &shape;
 	fixture.density = 1.0f;
+	fixture.restitution = 0.0f;
 
 	b->CreateFixture(&fixture);
 
@@ -688,6 +689,11 @@ void PhysBody::GetPosition(int& x, int &y) const
 	y = METERS_TO_PIXELS(pos.y) - (height);
 }
 
+void PhysBody::SetPosition(int x, int y, float angle){
+
+	body->SetTransform(b2Vec2(PIXEL_TO_METERS(x) , PIXEL_TO_METERS(y)) , DEGTORAD * angle);
+}
+
 void PhysBody::Force(b2Body* bodyA, int force)
 {
 	bodyA->ApplyTorque(force, true);
@@ -760,3 +766,4 @@ void ModulePhysics::BeginContact(b2Contact* contact)
 	if(physB && physB->listener != NULL)
 		physB->listener->OnCollision(physB, physA);
 }
+
