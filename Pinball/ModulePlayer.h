@@ -7,6 +7,7 @@
 class PhysBody;
 class b2PrismaticJoint;
 struct SDL_Texture;
+class b2RevoluteJoint;
 
 class ModulePlayer : public Module
 {
@@ -24,6 +25,9 @@ public:
 
 	SDL_Texture* ball_texture;
 	SDL_Texture* box_texture;
+
+	SDL_Texture* flipper_left_texture;
+	SDL_Texture* flipper_right_texture;
 	
 	PhysBody* ball;
 
@@ -32,6 +36,15 @@ public:
 	PhysBody* BoxUp;
 	PhysBody* StaticBox;
 	b2PrismaticJoint* prismatic_joint;
+
+	//Revolute Joint
+	PhysBody* FLeft;
+	PhysBody* StaticPointLeft;
+	b2RevoluteJoint* revolute_joint1;
+
+	PhysBody* FRight;
+	PhysBody* StaticPointRight;
+	b2RevoluteJoint* revolute_joint2;
 
 	int lifes;
 	int score;

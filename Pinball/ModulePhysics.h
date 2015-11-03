@@ -51,6 +51,7 @@ public:
 	bool CleanUp();
 
 	PhysBody* CreateCircle(int x, int y, int radius);
+	PhysBody* CreateStaticCircle(int x, int y, int radius);
 	PhysBody* CreateStaticRectangle(int x, int y, int width, int height);
 	PhysBody* CreateRectangle(int x, int y, int width, int height);
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height, float angle);
@@ -59,7 +60,7 @@ public:
 	PhysBody* CreateChainRestitution(int x, int y, int* points, int size);
 	
 
-	void CreateRevoluteJoin(int x1, int y1, int x2, int y2, PhysBody* bodyA, PhysBody* bodyB);
+	b2RevoluteJoint* CreateRevoluteJoin(int x1, int y1, int x2, int y2, PhysBody* bodyA, PhysBody* bodyB, const int lowAngle, const int upAngle, const int motorSpeed, const int maxTorque);
 	
 	//JOINT
 	b2PrismaticJoint* CreatePrismaticJoint(PhysBody* bodyA, PhysBody* bodyB);

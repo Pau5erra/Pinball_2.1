@@ -292,6 +292,31 @@ PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius)
 
 	return pbody;
 }
+PhysBody* ModulePhysics::CreateStaticCircle(int x, int y, int radius)
+{
+	b2BodyDef body;
+	body.type = b2_staticBody;
+	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+	body.bullet = true;
+
+	b2Body* b = world->CreateBody(&body);
+
+	b2CircleShape shape;
+	shape.m_radius = PIXEL_TO_METERS(radius);
+	b2FixtureDef fixture;
+	fixture.shape = &shape;
+	fixture.density = 1.0f;
+	fixture.restitution = 0.0f;
+
+	b->CreateFixture(&fixture);
+
+	PhysBody* pbody = new PhysBody();
+	pbody->body = b;
+	b->SetUserData(pbody);
+	pbody->width = pbody->height = radius;
+
+	return pbody;
+}
 
 PhysBody* ModulePhysics::CreateStaticRectangle(int x, int y, int width, int height){
 	b2BodyDef body;
@@ -470,53 +495,29 @@ PhysBody* ModulePhysics::CreateChainRestitution(int x, int y, int* points, int s
 	return pbody;
 }
 
-//li passem els punts de cada enclaje segons el body, i ha de rebre quins son
-void ModulePhysics::CreateRevoluteJoin(int x1, int y1, int x2, int y2, PhysBody* bodyA, PhysBody* bodyB)
-{
-	//
 
+b2RevoluteJoint* ModulePhysics::CreateRevoluteJoin(int x1, int y1, int x2, int y2, PhysBody* bodyA, PhysBody* bodyB, const int lowAngle, const int upAngle, const int motorSpeed, const int maxTorque)
+{
+	
 	b2RevoluteJointDef jd;
 
 	jd.bodyA = bodyA->body;
 	jd.bodyB = bodyB->body;
-	//enganchem ancors
-	//A: localAnchor  reben un vector, pertam les cordenades pasarles a b2Vec2 i pasarles a metres
+	
 	b2Vec2 AnchorA(PIXEL_TO_METERS(x1), PIXEL_TO_METERS(y1));
 	b2Vec2 AnchorB(PIXEL_TO_METERS(x2), PIXEL_TO_METERS(y2));
 	jd.localAnchorA = AnchorA;
 	jd.localAnchorB = AnchorB;
-	//Amb aixo ja tenim les posicions, ara fem les propietats especifiques del revolute joint
 
-	//Especificar que vull un limit
-	//jd.enableLimit = true;
-	//especificar quin es el limit de dalt i el de baix ( tambe tenim la opcio de posaro com a parametre
-	//i passaro a radiants
-	//jd.upperAngle = angle;
-	//jd.lowerAngle = angle_max;
-	//Especificar si vull motor;
-	//jd.enableMotor = true;
-	//Torque maxim
-	//jd.maxMotorTorque = 1000.0f;
-	//velocitat angular
-	//jd.motorSpeed = -360 * DEGTORAD;
+	jd.lowerAngle = lowAngle * DEGTORAD;
+	jd.upperAngle = upAngle * DEGTORAD;
+	jd.motorSpeed = motorSpeed;
+	jd.maxMotorTorque = maxTorque;
 
-	//per cambiar velocitat d'un joint un cop creat, s'utilitza una funció que es diu SetMotorSpeed(), per arribar, agafes el body (en aquest cas un PhysBody)
-	//((b2RevoluteJoint*)pbody->body->GetJointList()->joint)->SetMotorSpeed()
-
-	world->CreateJoint(&jd);
-
-
-	/*b2RevoluteJoint*  m_leftJoint = NULL;
-
-	jd.motorSpeed = 0.0f;
-	jd.localAnchorA = p1;
-	jd.bodyB = leftFlipper;
-	jd.lowerAngle = -30.0f * b2_pi / 180.0f;
-	jd.upperAngle = 5.0f * b2_pi / 180.0f;
-	m_leftJoint = (b2RevoluteJoint*)world->CreateJoint(&jd);*/
+	return ((b2RevoluteJoint*)world->CreateJoint(&jd));
+	
 }
 
-// 
 
 b2PrismaticJoint* ModulePhysics::CreatePrismaticJoint(PhysBody* bodyA, PhysBody* bodyB){
 	b2PrismaticJointDef jointD;
