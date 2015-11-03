@@ -50,7 +50,12 @@ public:
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height);
 	PhysBody* CreateChain(int x, int y, int* points, int size);
 	PhysBody* CreateChainStatic(int x, int y, int* points, int size);
+	PhysBody* CreateChainRestitution(int x, int y, int* points, int size);
+	
+	
 	void CreateRevoluteJoin(int x1, int y1, int x2, int y2, PhysBody* bodyA, PhysBody* bodyB);
+	
+	//JOINT
 	b2PrismaticJoint* CreatePrismaticJoint(PhysBody* bodyA, PhysBody* bodyB);
 
 	// b2ContactListener ---

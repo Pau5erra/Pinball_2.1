@@ -37,20 +37,13 @@ bool ModuleSceneIntro::Start()
 
 	circles.add(App->physics->CreateCircle(544, 602, 11));
 
-	//Prismatic joint
-	//boxes.add(App->physics->CreateRectangle(544, 613, 37, 19));
-	/*BoxUp = App->physics->CreateRectangle(544, 613, 37, 19);
-	StaticBox= App->physics->CreateStaticRectangle(544, 500, 37, 19);
-	
-
-	proba = App->physics->CreatePrismaticJoint(BoxUp, StaticBox);*/
-
+	/*
 	//definim una caixa qualsevol
 	caixa = App->physics->CreateRectangle(300,400,125,25);
 	//ara crear revolute join -> enganxar en cordenades de body que parteix des del centre i posem posicio a la esquina que es la meitat de width dividit per la meitat de heihgt
 	//segon dir a quin punt de lescenari en el anchor nomes si estas utilitzant una chain pk en aquest cas les chain ocupen tot l'escenari
 	App->physics->CreateRevoluteJoin(62, 12, 300, 400, caixa, App->physics->ground1);
-
+	*/
 	return ret;
 }
 

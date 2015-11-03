@@ -1,0 +1,15 @@
+// Pivot 0, 0
+int left_structuresrestitution[8] = {
+	180, 637,
+	181, 619,
+	140, 535,
+	127, 529
+};
+
+// Pivot 0.000000, 0.000000
+float left_structuresrestitution[8] = {
+	0.217918f, 0.770254f,
+	0.219128f, 0.748488f,
+	0.169492f, 0.646917f,
+	0.153753f, 0.639661f
+};

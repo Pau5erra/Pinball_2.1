@@ -36,7 +36,7 @@ bool ModulePhysics::Start()
 	b2BodyDef bd;
 	ground = world->CreateBody(&bd);
 
-	int pinball[138] = {
+	int pinball[148] = {
 		334, 826,
 		333, 813,
 		360, 789,
@@ -105,10 +105,16 @@ bool ModulePhysics::Start()
 		190, 791,
 		219, 815,
 		220, 833,
-		218, 833
+		218, 833,
+		-4, 830,
+		-4, -2,
+		828, -4,
+		829, 831,
+		347, 836
 	};
 	//CreateChainStatic(0, 0, pinball, 138);
-	ground1 = CreateChainStatic(0, 0, pinball, 138);
+	ground1 = CreateChainStatic(0, 0, pinball, 148);
+
 	int pinball_structure_up[32] = {
 		120, 223,
 		130, 229,
@@ -148,7 +154,7 @@ bool ModulePhysics::Start()
 		181, 637
 	};
 	CreateChainStatic(0, 0, left_triangles, 12);
-	int flippers[28] = {
+	/*int flippers[28] = {
 		159, 686,
 		156, 670,
 		169, 659,
@@ -164,8 +170,23 @@ bool ModulePhysics::Start()
 		198, 713,
 		160, 686
 	};
-	CreateChainStatic(0, 0, flippers, 28);
+	CreateChainStatic(0, 0, flippers, 28);*/
 
+	int right_structuresrestitution[8] = {
+		381, 633,
+		380, 619,
+		421, 535,
+		433, 527
+	};
+	CreateChainRestitution(0, 0, right_structuresrestitution, 8);
+
+	int left_structuresrestitution[8] = {
+		180, 637,
+		181, 619,
+		140, 535,
+		127, 529
+	};
+	CreateChainRestitution(0, 0, left_structuresrestitution, 8);
 
 	b2Vec2 p1(-2.0f, 0.0f);
 
@@ -383,6 +404,38 @@ PhysBody* ModulePhysics::CreateChainStatic(int x, int y, int* points, int size)
 
 	b2FixtureDef fixture;
 	fixture.shape = &shape;
+	b->CreateFixture(&fixture);
+
+	delete p;
+
+	PhysBody* pbody = new PhysBody();
+	pbody->body = b;
+	pbody->width = pbody->height = 0;
+	return pbody;
+}
+
+PhysBody* ModulePhysics::CreateChainRestitution(int x, int y, int* points, int size)
+{
+	b2BodyDef body;
+	body.type = b2_staticBody;
+	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+
+	b2Body* b = world->CreateBody(&body);
+
+	b2ChainShape shape;
+	b2Vec2* p = new b2Vec2[size / 2];
+
+	for (uint i = 0; i < size / 2; ++i)
+	{
+		p[i].x = PIXEL_TO_METERS(points[i * 2 + 0]);
+		p[i].y = PIXEL_TO_METERS(points[i * 2 + 1]);
+	}
+
+	shape.CreateLoop(p, size / 2);
+
+	b2FixtureDef fixture;
+	fixture.shape = &shape;
+	fixture.restitution = 10;
 	b->CreateFixture(&fixture);
 
 	delete p;
