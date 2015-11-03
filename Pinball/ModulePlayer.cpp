@@ -56,9 +56,9 @@ bool ModulePlayer::Start()
 		10, 2
 	};
 
-	FLeft = App->physics->CreateChain(0, 0, f1, 17);
-	StaticPointLeft = App->physics->CreateStaticCircle(50, 40, 5);
-	revolute_joint1 = App->physics->CreateRevoluteJoin(62, 12, 300, 400, FLeft, StaticPointLeft, 0, 70, -150, 100);
+	FLeft = App->physics->CreateChain(200, 700, f1, 17);
+	StaticPointLeft = App->physics->CreateStaticCircle(170, 676, 5);
+	revolute_joint1 = App->physics->CreateRevoluteJoin(10, 10, 30, 20, FLeft, StaticPointLeft, 0, 70, -150, 100);
 	
 
 	int f2[18] = {
@@ -73,9 +73,9 @@ bool ModulePlayer::Start()
 		66, 3
 	};
 
-	FRight = App->physics->CreateChain(0, 0, f2, 17);
-	StaticPointRight = App->physics->CreateStaticCircle(200, 600, 5);
-	revolute_joint2 = App->physics->CreateRevoluteJoin(62, 12, 300, 400, FLeft, StaticPointLeft, 0, 70, -150, 100);
+	FRight = App->physics->CreateChain(345, 700, f2, 17);
+	StaticPointRight = App->physics->CreateStaticCircle(377, 680, 5);
+	revolute_joint2 = App->physics->CreateRevoluteJoin(62, 12, 30, 40, FRight, StaticPointRight, -70, 0, 150, 100);
 
 	LOG("Loading player");
 	return true;
