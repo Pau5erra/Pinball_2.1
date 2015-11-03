@@ -35,6 +35,7 @@ public:
 
 	bool sensed;
 	bool ball_fall;
+	bool ball_up;
 	
 	SDL_Texture* pinball_empty;
 	SDL_Texture* flippers;

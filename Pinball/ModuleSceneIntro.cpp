@@ -86,8 +86,22 @@ update_status ModuleSceneIntro::Update()
 
 		App->player->ball->SetPosition(544, 565, 0.0f);
 		App->player->lifes -= 1;
+		if (App->player->lifes == 2){
+			pinball_empty = App->textures->Load("pinball/pinball_empty_2life.png");
+		}
+		else if (App->player->lifes == 1){
+			pinball_empty = App->textures->Load("pinball/pinball_empty_1life.png");
+		}
+		else if (App->player->lifes == 0){
+			pinball_empty = App->textures->Load("pinball/pinball_empty_0life.png");
+		}
+		else if (App->player->lifes == -1){
+			pinball_empty = App->textures->Load("pinball/pinball_empty.png");
+			App->player->lifes = 3;
+		}
 		ball_fall = false;
 	}
+
 	
 
 	
@@ -96,28 +110,9 @@ update_status ModuleSceneIntro::Update()
 
 void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
-	int x, y;
-
-	App->audio->PlayFx(bonus_fx);
-	
-	//PhysBody* finaleBody = App->physics->CreateStaticRectangle(0, 831, 826, 19);
-
 	if (bodyA == sensor || bodyB == sensor){
 	
 		ball_fall = true;
 	}
 
-
-	/*
-	if(bodyA)
-	{
-		bodyA->GetPosition(x, y);
-		App->renderer->DrawCircle(x, y, 50, 100, 100, 100);
-	}
-
-	if(bodyB)
-	{
-		bodyB->GetPosition(x, y);
-		App->renderer->DrawCircle(x, y, 50, 100, 100, 100);
-	}*/
 }
