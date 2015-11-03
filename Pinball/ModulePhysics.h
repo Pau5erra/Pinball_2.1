@@ -26,6 +26,11 @@ public:
 	int RayCast(int x1, int y1, int x2, int y2, float& normal_x, float& normal_y) const;
 	void Force(b2Body* bodyA, int force);
 
+	void setPush(float x, float y);
+	void setGravity();
+	b2Vec2 getNewVelocity();
+	void setNewVelocity( const b2Vec2& new_velocity);
+
 
 public:
 	int width, height;
@@ -48,12 +53,12 @@ public:
 	PhysBody* CreateCircle(int x, int y, int radius);
 	PhysBody* CreateStaticRectangle(int x, int y, int width, int height);
 	PhysBody* CreateRectangle(int x, int y, int width, int height);
-	PhysBody* CreateRectangleSensor(int x, int y, int width, int height);
+	PhysBody* CreateRectangleSensor(int x, int y, int width, int height, float angle);
 	PhysBody* CreateChain(int x, int y, int* points, int size);
 	PhysBody* CreateChainStatic(int x, int y, int* points, int size);
 	PhysBody* CreateChainRestitution(int x, int y, int* points, int size);
 	
-	
+
 	void CreateRevoluteJoin(int x1, int y1, int x2, int y2, PhysBody* bodyA, PhysBody* bodyB);
 	
 	//JOINT

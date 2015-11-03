@@ -1,0 +1,9 @@
+// Pivot 0, 0
+int provacord[2] = {
+	277, 443
+};
+
+// Pivot 0.000000, 0.000000
+float provacord[2] = {
+	0.335351f, 0.535671f
+};

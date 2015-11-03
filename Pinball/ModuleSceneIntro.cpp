@@ -11,6 +11,7 @@
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 	ball_fall = false;
+	ball_up = false;
 	ray_on = false;
 	sensed = false;
 }
@@ -34,10 +35,15 @@ bool ModuleSceneIntro::Start()
 	pinball_empty = App->textures->Load("pinball/pinball_empty.png");
 	//flippers = App->textures->Load("pinball/flippers.png");
 
-	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH/2, 881, SCREEN_WIDTH, 50);
+	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH/2, 881, SCREEN_WIDTH, 50, 0.0f);
 	
 	sensor->listener = this;
 
+	SensorLeftTriangle = App->physics->CreateRectangleSensor(161, 580, 110, 16, -90.0f);
+	SensorLeftTriangle->listener = this;
+
+	SensorRightTriangle = App->physics->CreateRectangleSensor(404, 580, 110, 16, 90.0f);
+	SensorRightTriangle->listener = this;
 	
 
 	/*
@@ -82,6 +88,8 @@ update_status ModuleSceneIntro::Update()
 
 	fVector normal(0.0f, 0.0f);
 
+
+	//Control of Lifes
 	if (ball_fall){
 
 		App->player->ball->SetPosition(544, 565, 0.0f);
@@ -102,7 +110,13 @@ update_status ModuleSceneIntro::Update()
 		ball_fall = false;
 	}
 
-	
+	if (ball_up){
+
+		App->player->ball->getNewVelocity();
+		App->player->ball->setGravity();
+		App->player->ball->setPush(0.0f, -10000.0f);
+		ball_up = false;
+	}
 
 	
 	return UPDATE_CONTINUE;
@@ -115,4 +129,11 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		ball_fall = true;
 	}
 
+	if (bodyA == SensorLeftTriangle || bodyB == SensorLeftTriangle){
+		ball_up = true;
+	}
+
+	if (bodyA == SensorRightTriangle || bodyB == SensorRightTriangle){
+		ball_up = true;
+	}
 }

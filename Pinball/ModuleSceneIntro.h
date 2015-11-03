@@ -32,6 +32,9 @@ public:
 	
 
 	PhysBody* sensor;
+	//Two sensors of the two triangles
+	PhysBody* SensorRightTriangle;
+	PhysBody* SensorLeftTriangle;
 
 	bool sensed;
 	bool ball_fall;

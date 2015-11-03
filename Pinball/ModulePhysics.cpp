@@ -172,6 +172,7 @@ bool ModulePhysics::Start()
 		433, 602
 	};
 	CreateChainStatic(0, 0, right_triangles, 8);
+
 	/*int flippers[28] = {
 		159, 686,
 		156, 670,
@@ -189,7 +190,7 @@ bool ModulePhysics::Start()
 		160, 686
 	};
 	CreateChainStatic(0, 0, flippers, 28);*/
-
+	/*
 	int right_structuresrestitution[8] = {
 		381, 633,
 		380, 619,
@@ -205,7 +206,7 @@ bool ModulePhysics::Start()
 		127, 529
 	};
 	CreateChainRestitution(0, 0, left_structuresrestitution, 8);
-
+	*/
 	b2Vec2 p1(-2.0f, 0.0f);
 
 	
@@ -321,6 +322,7 @@ PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height)
 	b2BodyDef body;
 	body.type = b2_dynamicBody;
 	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+	
 
 	b2Body* b = world->CreateBody(&body);
 	b2PolygonShape box;
@@ -342,11 +344,12 @@ PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height)
 	return pbody;
 }
 
-PhysBody* ModulePhysics::CreateRectangleSensor(int x, int y, int width, int height)
+PhysBody* ModulePhysics::CreateRectangleSensor(int x, int y, int width, int height, float angle)
 {
 	b2BodyDef body;
 	body.type = b2_staticBody;
 	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+	body.angle = angle;
 
 	b2Body* b = world->CreateBody(&body);
 
@@ -690,8 +693,8 @@ void PhysBody::GetPosition(int& x, int &y) const
 }
 
 void PhysBody::SetPosition(int x, int y, float angle){
-
-	body->SetTransform(b2Vec2(PIXEL_TO_METERS(x) , PIXEL_TO_METERS(y)) , DEGTORAD * angle);
+	b2Vec2 vect(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+	body->SetTransform(vect , DEGTORAD * angle);
 }
 
 void PhysBody::Force(b2Body* bodyA, int force)
@@ -767,3 +770,34 @@ void ModulePhysics::BeginContact(b2Contact* contact)
 		physB->listener->OnCollision(physB, physA);
 }
 
+void PhysBody::setPush(float x, float y){
+	b2Vec2 vect(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+	body->ApplyForceToCenter(vect, true);
+}
+
+void PhysBody::setGravity(){
+	body->SetGravityScale(3.0f);
+}
+
+b2Vec2 PhysBody::getNewVelocity(){
+
+	b2Vec2 vect = body->GetLinearVelocity();
+	b2Vec2 new_velocity;
+
+	new_velocity.y = 0;
+
+	if (vect.x < 0){
+		new_velocity.x = -5;
+	}
+
+	else {
+		new_velocity.x = 5;
+	}
+
+	return new_velocity;
+}
+
+void PhysBody::setNewVelocity(const b2Vec2& new_velocity){
+	
+	body->SetLinearVelocity(new_velocity);
+}
