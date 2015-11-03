@@ -145,6 +145,16 @@ bool ModulePhysics::Start()
 	};
 	CreateChainStatic(0, 0, left_structures, 12);
 
+	int right_structures[12] = {
+		392, 676,
+		462, 627,
+		465, 510,
+		474, 502,
+		476, 646,
+		404, 691
+	};
+	CreateChainStatic(0, 0, right_structures, 12);
+
 	int left_triangles[12] = {
 		184, 621,
 		140, 537,
@@ -154,6 +164,14 @@ bool ModulePhysics::Start()
 		181, 637
 	};
 	CreateChainStatic(0, 0, left_triangles, 12);
+
+	int right_triangles[8] = {
+		381, 641,
+		381, 622,
+		431, 530,
+		433, 602
+	};
+	CreateChainStatic(0, 0, right_triangles, 8);
 	/*int flippers[28] = {
 		159, 686,
 		156, 670,
@@ -252,6 +270,7 @@ PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius)
 	b2BodyDef body;
 	body.type = b2_dynamicBody;
 	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+	body.bullet=true;
 
 	b2Body* b = world->CreateBody(&body);
 
