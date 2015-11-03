@@ -14,6 +14,8 @@ ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Modul
 	ball_up = false;
 	ray_on = false;
 	sensed = false;
+	ball_scored = false;
+	ball_best_score = false;
 }
 
 ModuleSceneIntro::~ModuleSceneIntro()
@@ -35,16 +37,30 @@ bool ModuleSceneIntro::Start()
 	pinball_empty = App->textures->Load("pinball/pinball_empty.png");
 	//flippers = App->textures->Load("pinball/flippers.png");
 
+	//Sensor for ground
 	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH/2, 881, SCREEN_WIDTH, 50, 0.0f);
 	
 	sensor->listener = this;
 
+	//Sensor for structure triangles
 	SensorLeftTriangle = App->physics->CreateRectangleSensor(161, 580, 110, 16, -90.0f);
 	SensorLeftTriangle->listener = this;
 
 	SensorRightTriangle = App->physics->CreateRectangleSensor(404, 580, 110, 16, 90.0f);
 	SensorRightTriangle->listener = this;
 	
+	//Score Sensors
+	ScoreSensor1 = App->physics->CreateRectangleSensor(154, 242, 35, 10, 0.0f);
+	ScoreSensor1->listener = this;
+	ScoreSensor2 = App->physics->CreateRectangleSensor(204, 242, 35, 10, 0.0f);
+	ScoreSensor1->listener = this;
+	ScoreSensor3 = App->physics->CreateRectangleSensor(368, 242, 35, 10, 0.0f);
+	ScoreSensor1->listener = this;
+	ScoreSensor4 = App->physics->CreateRectangleSensor(417, 242, 35, 10, 0.0f);
+	ScoreSensor1->listener = this;
+
+	ScoreBestSensor = App->physics->CreateRectangleSensor(284, 222, 45, 10, 0.0f);
+	ScoreBestSensor->listener = this;
 
 	/*
 	//definim una caixa qualsevol
@@ -70,6 +86,8 @@ update_status ModuleSceneIntro::Update()
 	
 		App->renderer->Blit(pinball_empty, 0, 0);
 		App->renderer->Blit(flippers,0,0);
+		App->renderer->Blit(App->player->flipper_left_texture, 150, 670, NULL, 1.0f, App->player->FLeft->GetRotation(), 32, 30);
+		App->renderer->Blit(App->player->flipper_right_texture, 290, 660, NULL, 1.0f, App->player->FRight->GetRotation(), 91, 41);
 	/*if (App->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 	{
 		caixa->Force(caixa->body, 32 * DEGTORAD);
@@ -106,6 +124,7 @@ update_status ModuleSceneIntro::Update()
 		else if (App->player->lifes == -1){
 			pinball_empty = App->textures->Load("pinball/pinball_empty.png");
 			App->player->lifes = 3;
+			App->player->score = 0;
 		}
 		ball_fall = false;
 	}
@@ -118,7 +137,16 @@ update_status ModuleSceneIntro::Update()
 		ball_up = false;
 	}
 
-	
+	if (ball_scored){
+		App->player->score += 50;
+		ball_scored = false;
+	}
+
+	if (ball_best_score){
+		App->player->score += 200;
+		ball_best_score = false;
+	}
+
 	return UPDATE_CONTINUE;
 }
 
@@ -135,5 +163,22 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 
 	if (bodyA == SensorRightTriangle || bodyB == SensorRightTriangle){
 		ball_up = true;
+	}
+	//Check if collision to score
+	if (bodyA == ScoreSensor1 || bodyB == ScoreSensor1){
+		ball_scored = true;
+	}
+	if (bodyA == ScoreSensor2 || bodyB == ScoreSensor2){
+		ball_scored = true;
+	}
+	if (bodyA == ScoreSensor3 || bodyB == ScoreSensor3){
+		ball_scored = true;
+	}
+	if (bodyA == ScoreSensor4 || bodyB == ScoreSensor4){
+		ball_scored = true;
+	}
+
+	if (bodyA == ScoreBestSensor || bodyB == ScoreBestSensor){
+		ball_best_score = true;
 	}
 }

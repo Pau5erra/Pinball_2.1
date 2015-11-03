@@ -22,7 +22,6 @@ public:
 public:
 	
 	p2List<PhysBody*> boxes;
-	p2List<PhysBody*> ricks;
 
 	
 	//creem un punter body que apuntara al objecte caixa
@@ -42,9 +41,14 @@ public:
 	PhysBody* ScoreSensor3;
 	PhysBody* ScoreSensor4;
 
+	PhysBody* ScoreBestSensor;
+
+	//To check collisions
 	bool sensed;
 	bool ball_fall;
 	bool ball_up;
+	bool ball_scored;
+	bool ball_best_score;
 	
 	SDL_Texture* pinball_empty;
 	SDL_Texture* flippers;

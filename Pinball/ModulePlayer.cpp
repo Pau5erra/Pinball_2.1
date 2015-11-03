@@ -20,8 +20,8 @@ ModulePlayer::ModulePlayer(Application* app, bool start_enabled) : Module(app, s
 ModulePlayer::~ModulePlayer()
 {
 	prismatic_joint = NULL;
-	revolute_joint1 = NULL;
-	revolute_joint2 = NULL;
+	revolute_joint_left = NULL;
+	revolute_joint_right = NULL;
 }
 
 // Load assets
@@ -31,51 +31,50 @@ bool ModulePlayer::Start()
 	score = 0;
 	ball_texture = App->textures->Load("pinball/wheel1.png");
 	box_texture = App->textures->Load("pinball/box.png");
-
+	flipper_left_texture = App->textures->Load("pinball/flipper_left.png");
+	flipper_right_texture = App->textures->Load("pinball/flipper_right.png");
+	
+	//Create Ball
 	ball = App->physics->CreateCircle(544, 565, 11);
 	ball->listener = this;
 
+	//Create Bounce
 	BoxUp = App->physics->CreateRectangle(544, 613, 37, 19);
 	StaticBox = App->physics->CreateStaticRectangle(544, 500, 37, 19);
 
 
 	prismatic_joint = App->physics->CreatePrismaticJoint(BoxUp, StaticBox);
 
-	flipper_left_texture = App->textures->Load("pinball/flipper_left.png");
-	flipper_right_texture = App->textures->Load("pinball/flipper_right.png");
-
-	int f1[18] = {
-		10, 2,
-		22, 1,
-		90, 62,
-		91, 70,
-		87, 74,
-		76, 73,
-		2, 23,
-		2, 11,
-		10, 2
-	};
-
-	FLeft = App->physics->CreateChain(200, 700, f1, 17);
-	StaticPointLeft = App->physics->CreateStaticCircle(170, 676, 5);
-	revolute_joint1 = App->physics->CreateRevoluteJoin(10, 10, 30, 20, FLeft, StaticPointLeft, 0, 70, -150, 100);
 	
 
-	int f2[18] = {
-		66, 3,
-		82, 1,
-		90, 12,
-		90, 21,
-		14, 74,
-		4, 74,
-		0, 68,
-		0, 61,
-		66, 3
+	int flipper_left[8] = {
+		28, 13,
+		106, 79,
+		97, 91,
+		15, 35
 	};
 
-	FRight = App->physics->CreateChain(345, 700, f2, 17);
-	StaticPointRight = App->physics->CreateStaticCircle(377, 680, 5);
-	revolute_joint2 = App->physics->CreateRevoluteJoin(62, 12, 30, 40, FRight, StaticPointRight, -70, 0, 150, 100);
+	FLeft = App->physics->CreatePolygon(170, 670, flipper_left, 8, b2_dynamicBody, 2.5f);
+	StaticPointLeft = App->physics->CreateStaticCircle(181, 696, 5);
+	b2Vec2 FLeft_center = FLeft->body->GetLocalCenter();
+	FLeft_center.x -= PIXEL_TO_METERS(25);
+	FLeft_center.y -= PIXEL_TO_METERS(25);
+	revolute_joint_left = App->physics->CreateRevoluteJoin(StaticPointLeft, FLeft, StaticPointLeft->body->GetLocalCenter(), FLeft_center , true, -70, 0, -150, 300);
+	
+
+	int flipper_right[8] = {
+		92, 23,
+		12, 84,
+		21, 97,
+		104, 49
+	};
+
+	FRight = App->physics->CreatePolygon(300, 670, flipper_right, 8, b2_dynamicBody, 2.5f);
+	StaticPointRight = App->physics->CreateStaticCircle(380, 696, 5);
+	b2Vec2 FRight_center = FRight->body->GetLocalCenter();
+	FRight_center.x += PIXEL_TO_METERS(25);
+	FRight_center.y -= PIXEL_TO_METERS(25);
+	revolute_joint_right = App->physics->CreateRevoluteJoin(StaticPointRight, FRight, StaticPointRight->body->GetLocalCenter(), FRight_center, true, 0, 70, -150, -300);
 
 	LOG("Loading player");
 	return true;
@@ -118,7 +117,22 @@ update_status ModulePlayer::Update()
 
 		prismatic_joint->EnableMotor(true);
 	}
-	
+	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN){
+
+		revolute_joint_left->EnableMotor(true);
+	}
+	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_UP){
+
+		revolute_joint_left->EnableMotor(false);
+	}
+	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_DOWN){
+
+		revolute_joint_right->EnableMotor(true);
+	}
+	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_UP){
+
+		revolute_joint_right->EnableMotor(false);
+	}
 
 	//Llista de boles quan apretes 1
 	p2List_item<PhysBody*>* c = circles.getFirst();

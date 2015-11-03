@@ -59,10 +59,10 @@ public:
 	PhysBody* CreateChainStatic(int x, int y, int* points, int size);
 	PhysBody* CreateChainRestitution(int x, int y, int* points, int size);
 	
+	PhysBody* CreatePolygon(int x, int y, int* points, int size, b2BodyType bodyType, float density = 1.0f, bool sensor = false);
 
-	b2RevoluteJoint* CreateRevoluteJoin(int x1, int y1, int x2, int y2, PhysBody* bodyA, PhysBody* bodyB, const int lowAngle, const int upAngle, const int motorSpeed, const int maxTorque);
-	
 	//JOINT
+	b2RevoluteJoint* CreateRevoluteJoin(PhysBody* bodyA, PhysBody* bodyB,const  b2Vec2& center_1, const b2Vec2 center_2, bool limit, const int lowAngle, const int upAngle, const int motorSpeed, const int maxTorque);
 	b2PrismaticJoint* CreatePrismaticJoint(PhysBody* bodyA, PhysBody* bodyB);
 
 	// b2ContactListener ---

@@ -40,11 +40,12 @@ public:
 	//Revolute Joint
 	PhysBody* FLeft;
 	PhysBody* StaticPointLeft;
-	b2RevoluteJoint* revolute_joint1;
+	b2RevoluteJoint* revolute_joint_left;
+	
 
 	PhysBody* FRight;
 	PhysBody* StaticPointRight;
-	b2RevoluteJoint* revolute_joint2;
+	b2RevoluteJoint* revolute_joint_right;
 
 	int lifes;
 	int score;

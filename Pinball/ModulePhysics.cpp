@@ -495,20 +495,51 @@ PhysBody* ModulePhysics::CreateChainRestitution(int x, int y, int* points, int s
 	return pbody;
 }
 
+PhysBody* ModulePhysics::CreatePolygon(int x, int y, int* points, int size, b2BodyType bodyType, float density, bool sensor)
+{
+	b2BodyDef body;
+	body.type = bodyType;
+	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
 
-b2RevoluteJoint* ModulePhysics::CreateRevoluteJoin(int x1, int y1, int x2, int y2, PhysBody* bodyA, PhysBody* bodyB, const int lowAngle, const int upAngle, const int motorSpeed, const int maxTorque)
+	b2Body* b = world->CreateBody(&body);
+	b2PolygonShape polygon;
+
+	b2Vec2* p = new b2Vec2[size / 2];
+
+	for (uint i = 0; i < size / 2; ++i)
+	{
+		p[i].x = PIXEL_TO_METERS(points[i * 2 + 0]);
+		p[i].y = PIXEL_TO_METERS(points[i * 2 + 1]);
+	}
+
+	polygon.Set(p, size / 2);
+
+	b2FixtureDef fixture;
+	fixture.shape = &polygon;
+	fixture.density = density;
+	fixture.isSensor = sensor;
+
+	b->CreateFixture(&fixture);
+
+	delete p;
+
+	PhysBody* pbody = new PhysBody();
+	pbody->body = b;
+	b->SetUserData(pbody);
+
+	return pbody;
+}
+
+b2RevoluteJoint* ModulePhysics::CreateRevoluteJoin(PhysBody* bodyA, PhysBody* bodyB, const b2Vec2& center_1, const b2Vec2 center_2, bool limit,  const int lowAngle, const int upAngle, const int motorSpeed, const int maxTorque)
 {
 	
 	b2RevoluteJointDef jd;
 
 	jd.bodyA = bodyA->body;
 	jd.bodyB = bodyB->body;
-	
-	b2Vec2 AnchorA(PIXEL_TO_METERS(x1), PIXEL_TO_METERS(y1));
-	b2Vec2 AnchorB(PIXEL_TO_METERS(x2), PIXEL_TO_METERS(y2));
-	jd.localAnchorA = AnchorA;
-	jd.localAnchorB = AnchorB;
-
+	jd.localAnchorA = center_1;
+	jd.localAnchorB = center_2;
+	jd.enableLimit = limit;
 	jd.lowerAngle = lowAngle * DEGTORAD;
 	jd.upperAngle = upAngle * DEGTORAD;
 	jd.motorSpeed = motorSpeed;
