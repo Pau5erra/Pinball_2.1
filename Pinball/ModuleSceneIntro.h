@@ -36,6 +36,12 @@ public:
 	PhysBody* SensorRightTriangle;
 	PhysBody* SensorLeftTriangle;
 
+	//Sensors of score
+	PhysBody* ScoreSensor1;
+	PhysBody* ScoreSensor2;
+	PhysBody* ScoreSensor3;
+	PhysBody* ScoreSensor4;
+
 	bool sensed;
 	bool ball_fall;
 	bool ball_up;

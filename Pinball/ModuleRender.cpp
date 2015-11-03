@@ -67,7 +67,7 @@ update_status ModuleRender::Update()
 		App->renderer->camera.x -= speed;
 	*/
 
-	title.create("Lifes: %d",App->player->lifes);
+	title.create("Lifes: %d, Score: %d",App->player->lifes, App->player->score);
 	App->window->SetTitle(title.GetString());
 
 

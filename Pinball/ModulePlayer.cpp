@@ -23,6 +23,7 @@ ModulePlayer::~ModulePlayer()
 bool ModulePlayer::Start()
 {
 	lifes = 3;
+	score = 0;
 	ball_texture = App->textures->Load("pinball/wheel1.png");
 	box_texture = App->textures->Load("pinball/box.png");
 

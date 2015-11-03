@@ -34,4 +34,5 @@ public:
 	b2PrismaticJoint* prismatic_joint;
 
 	int lifes;
+	int score;
 };
